@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section>
+  <article>
+    <h1>All Reservations</h1>
+    <!--Begin row-->
+    <div class="row">
+      <!--Begin col-->
+      <div class="column">
+        <pre id="bookings"></pre>
+      </div>
+      <!--End col-->
+
+      <!--Begin col-->
+      <div class="column">
+        <div class="videowrap">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11898.289517452584!2d-87.60853049433447!3d41.79442860243028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880e2912ce6f7027%3A0xc0cfb5545d4a37b2!2sHyde%20Park%2C%20Chicago%2C%20IL%2C%20USA!5e0!3m2!1sen!2spt!4v1662384760663!5m2!1sen!2spt"
+            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+      <!--End col-->
+    </div>
+    <!--End row-->
+
+
+
+
+  </article>
+</section>
+
+<!-- Add your code inside the script tags below  -->
+<script>
+const bookings = JSON.parse('{{ bookings|safe }}');
+console.log(bookings);
+
+const pretty_json = JSON.stringify(bookings, null, 2);
+console.log(pretty_json);
+
+const bookingsTable = document.createElement("table");
+
+const reservationDate = document.getElementById("id_reservation_date");
+if (reservationDate) {
+  reservationDate.type = "date";
+}
+
+// Create header row
+const headerRow = bookingsTable.insertRow();
+const nameHeader = headerRow.insertCell();
+nameHeader.innerHTML = "Name";
+const dateHeader = headerRow.insertCell();
+dateHeader.innerHTML = "Reservation Date";
+const slotHeader = headerRow.insertCell();
+slotHeader.innerHTML = "Reservation Slot";
+
+// Insert data rows
+bookings.forEach((booking) => {
+  const row = bookingsTable.insertRow();
+  const nameCell = row.insertCell();
+  nameCell.innerHTML = booking.fields.first_name;
+  const dateCell = row.insertCell();
+  dateCell.innerHTML = booking.fields.reservation_date;
+  const slotCell = row.insertCell();
+  slotCell.innerHTML = booking.fields.reservation_slot;
+});
+
+// Insert table into HTML
+const bookingsContainer = document.getElementById("bookings");
+bookingsContainer.appendChild(bookingsTable);
+</script>
+<style>
+  table {
+  border-collapse: collapse;
+  width: 80%;
+  margin-bottom: 1em;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+  color: #444;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #ddd;
+}
+
+</style>
+{% endblock %}
+
